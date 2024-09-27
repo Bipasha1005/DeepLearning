@@ -1,0 +1,48 @@
+import numpy as np  # Importing numpy, a library used for numerical operations and handling arrays efficiently
+
+# Sigmoid activation function: takes input 'x' and squashes it between 0 and 1
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+# Derivative of the sigmoid function: used to calculate the slope during backpropagation
+def sigmoid_derivative(x):
+    return x * (1 - x)
+
+# Define the training inputs (4 examples with 3 features each)
+training_inputs = np.array([[0, 0, 1],   # Example 1
+                            [1, 1, 1],   # Example 2
+                            [1, 0, 1],   # Example 3
+                            [0, 1, 1]])  # Example 4
+
+print("The inputs are: \n", training_inputs)
+
+# Define the training outputs (expected outputs for each example)
+training_outputs = np.array([[0],    # Output for Example 1
+                             [1],    # Output for Example 2
+                             [1],    # Output for Example 3
+                             [0]])   # Output for Example 4
+
+print("The outputs are: \n", training_outputs)
+
+# Set random seed to ensure reproducibility of the results
+np.random.seed(1)
+
+# Initialize synaptic weights randomly with values between -1 and 1 (for 3 inputs to 1 output)
+# Weights are key to adjust during training to make the model predict the correct output
+synaptic_weights = 2 * np.random.random((3, 1)) - 1
+print("The initial weights are: \n", synaptic_weights)
+
+# Training loop - run 100 iterations of training (this can be adjusted)
+for i in range(100):
+    # Forward pass: calculate the output using the current synaptic weights
+    # Dot product of input features and synaptic weights, then apply the sigmoid function
+    input_layer = training_inputs
+    outputs = sigmoid(np.dot(input_layer, synaptic_weights))
+
+# Display the final output after training (before backpropagation)
+print("Output after training : ", outputs)
+
+# Calculate the error: difference between the actual output and the predicted output
+# This is what we want to minimize through backpropagation
+error = training_outputs - outputs
+print("Error after training: ", error)
