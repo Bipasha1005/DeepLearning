@@ -1,0 +1,54 @@
+import numpy as np  # Importing numpy for efficient numerical operations and handling arrays
+import matplotlib.pyplot as plt  # Importing matplotlib for plotting graphs (visualization)
+
+# Sigmoid activation function: maps any real-valued number into the range (0, 1)
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+# Derivative of the sigmoid function: gives the slope of the sigmoid, used for gradient calculations in backpropagation
+def sigmoid_derivative(x):
+    return x * (1 - x)
+
+# Define the training inputs (4 examples, each with 3 features)
+training_inputs = np.array([[0, 0, 1],  # Example 1
+                            [1, 1, 1],  # Example 2
+                            [1, 0, 1],  # Example 3
+                            [0, 1, 1]]) # Example 4
+print("The inputs are: \n", training_inputs)
+
+# Define the expected training outputs (column vector, with 4 outputs for 4 examples)
+training_outputs = np.array([[0, 1, 1, 0]]).T  # Transpose to make it a column vector
+print("The outputs are: \n", training_outputs)
+
+# Set random seed for reproducibility (ensure the random initialization is the same each time)
+np.random.seed(1)
+
+# Initialize synaptic weights randomly with values between -1 and 1 (for 3 inputs to 1 output)
+synaptic_weights = 2 * np.random.random((3, 1)) - 1
+print("The initial weights are: \n", synaptic_weights)
+
+# Training loop - run the training for 10 iterations
+for i in range(10):
+    # Forward pass: compute the output of the neural network using the sigmoid function
+    input_layer = training_inputs
+    outputs = sigmoid(np.dot(input_layer, synaptic_weights))
+    print("Output after training : \n", outputs)
+
+    # Compute the error: difference between expected and predicted output
+    error = training_outputs - outputs
+    print("Error before training: \n", error)
+
+    # Backpropagation: calculate adjustments using the sigmoid derivative and error
+    adjustments = error * sigmoid_derivative(outputs)
+    print("Adjustments after training: \n", adjustments)
+
+    # Update synaptic weights: adjust the weights based on the adjustments calculated
+    synaptic_weights += np.dot(input_layer.T, adjustments)
+    print("Synaptic weights after training: \n", synaptic_weights)
+
+# Final output after the last iteration of training
+print("Final output after training: \n", outputs)
+
+# Plot the error over the iterations to visualize the learning process
+plt.plot(error)  # Plot the error array
+plt.show()  # Display the plot
